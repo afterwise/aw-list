@@ -24,11 +24,13 @@
 #ifndef AW_LIST_H
 #define AW_LIST_H
 
-#include <stdbool.h>
+#if !_MSC_VER
+# include <stdbool.h>
+#endif
 #include <stddef.h>
 
 #if __GNUC__
-# define _list_alwaysinline inline __attribute__((always_inline, nodebug))
+# define _list_alwaysinline inline __attribute__((always_inline))
 #elif _MSC_VER
 # define _list_alwaysinline __forceinline
 #endif
@@ -42,20 +44,20 @@ struct list {
 	struct list *next;
 };
 
-_list_alwaysinline void list_init(struct list *list) {
+static _list_alwaysinline void list_init(struct list *list) {
 	list->prev = list;
 	list->next = list;
 }
 
-_list_alwaysinline bool list_empty(const struct list *list) {
+static _list_alwaysinline bool list_empty(const struct list *list) {
 	return list->next == list;
 }
 
-_list_alwaysinline bool list_singular(const struct list *list) {
+static _list_alwaysinline bool list_singular(const struct list *list) {
 	return list->next != list && list->next == list->prev;
 }
 
-_list_alwaysinline int list_count(const struct list *list) {
+static _list_alwaysinline int list_count(const struct list *list) {
 	struct list *it;
 	int n = 0;
 
@@ -65,34 +67,34 @@ _list_alwaysinline int list_count(const struct list *list) {
 	return n;
 }
 
-_list_alwaysinline void list_add_front(struct list *list, struct list *elem) {
+static _list_alwaysinline void list_add_front(struct list *list, struct list *elem) {
 	elem->prev = list;
 	elem->next = list->next;
 	list->prev->next = elem;
 	list->next = elem;
 }
 
-_list_alwaysinline void list_add_back(struct list *list, struct list *elem) {
+static _list_alwaysinline void list_add_back(struct list *list, struct list *elem) {
 	elem->next = list;
 	elem->prev = list->prev;
 	list->prev->next = elem;
 	list->prev = elem;
 }
 
-_list_alwaysinline void *list_front(struct list *list) {
+static _list_alwaysinline void *list_front(struct list *list) {
 	return (list->next != list) ? list->next : NULL;
 }
 
-_list_alwaysinline void *list_back(struct list *list) {
+static _list_alwaysinline void *list_back(struct list *list) {
 	return (list->next != list) ? list->prev : NULL;
 }
 
-_list_alwaysinline void list_remove(struct list *elem) {
+static _list_alwaysinline void list_remove(struct list *elem) {
 	elem->next->prev = elem->prev;
 	elem->prev->next = elem->next;
 }
 
-_list_alwaysinline void list_replace(struct list *old_elem, struct list *new_elem) {
+static _list_alwaysinline void list_replace(struct list *old_elem, struct list *new_elem) {
 	new_elem->next = old_elem->next;
 	new_elem->next->prev  = new_elem;
 	new_elem->prev = old_elem->prev;
