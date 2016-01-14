@@ -49,6 +49,9 @@ static _list_alwaysinline void list_init(struct list *list) {
 	list->next = list;
 }
 
+#define list_object(ptr,type,member) \
+	((type) ((char *) (ptr) - offsetof(type, member)))
+
 static _list_alwaysinline bool list_empty(const struct list *list) {
 	return list->next == list;
 }
