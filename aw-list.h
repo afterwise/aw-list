@@ -97,6 +97,16 @@ static _list_alwaysinline void list_remove(struct list *elem) {
 	elem->prev->next = elem->next;
 }
 
+static _list_alwaysinline void *list_remove_front(struct list *list) {
+	struct list *elem = list->next;
+	return (elem != list) ? list_remove(elem), elem : NULL;
+}
+
+static _list_alwaysinline void *list_remove_back(struct list *list) {
+	struct list *elem = list->prev;
+	return (elem != list) ? list_remove(elem), elem : NULL;
+}
+
 static _list_alwaysinline void list_replace(struct list *old_elem, struct list *new_elem) {
 	new_elem->next = old_elem->next;
 	new_elem->next->prev  = new_elem;
