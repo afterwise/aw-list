@@ -1,6 +1,6 @@
 
 /*
-   Copyright (c) 2014 Malte Hildingsson, malte (at) afterwi.se
+   Copyright (c) 2014-2021 Malte Hildingsson, malte (at) afterwi.se
 
    Permission is hereby granted, free of charge, to any person obtaining a copy
    of this software and associated documentation files (the "Software"), to deal
@@ -66,6 +66,14 @@ _list_alwaysinline size_t list_count(const struct list *list) {
 	for (it = list->next; it != list; it = it->next)
 		++n;
 	return n;
+}
+
+_list_alwaysinline struct list *list_begin(struct list *list) {
+	return list->next;
+}
+
+_list_alwaysinline struct list *list_end(struct list *list) {
+	return list;
 }
 
 _list_alwaysinline void list_add_front(struct list *list, struct list *link) {
